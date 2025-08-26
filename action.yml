@@ -1,0 +1,61 @@
+name: 'ResolveAI Action'
+description: 'Hand off software maintenance jobs to a private runner running in AWS ECS'
+author: 'AIProductLabs'
+branding:
+  icon: 'git-branch'
+  color: 'blue'
+
+inputs:
+  ecs_endpoint:
+    description: 'Base URL for ECS job intake (e.g. https://runner.resolveai.example.com/v1/jobs)'
+    required: true
+  ecs_api_token:
+    description: 'Shared-secret for caller authentication'
+    required: true
+  ecs_hmac_secret:
+    description: 'Secret for HMAC-SHA256 signing of the JSON payload'
+    required: true
+  action:
+    description: 'Action type: "run" or "plan"'
+    required: false
+    default: 'run'
+  timeout_seconds:
+    description: 'Request timeout in seconds'
+    required: false
+    default: '120'
+  max_retries:
+    description: 'Maximum number of retries'
+    required: false
+    default: '4'
+  backoff_ms:
+    description: 'Initial backoff delay in milliseconds'
+    required: false
+    default: '500'
+  llm_provider:
+    description: 'LLM provider: "openai" or "anthropic"'
+    required: false
+  model:
+    description: 'Model name (e.g., "gpt-4o-mini")'
+    required: false
+  allow_write_paths:
+    description: 'Comma-separated glob patterns for allowed write paths'
+    required: false
+  deny_write_paths:
+    description: 'Comma-separated glob patterns for denied write paths'
+    required: false
+  vectordb_url:
+    description: 'Vector database URL (forwarded, not logged)'
+    required: false
+  vectordb_token:
+    description: 'Vector database token (forwarded, not logged)'
+    required: false
+
+outputs:
+  job_id:
+    description: 'Unique job identifier returned by the ECS service'
+  status:
+    description: 'Job status: "accepted" or "rejected"'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

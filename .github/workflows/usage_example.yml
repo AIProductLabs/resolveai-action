@@ -1,0 +1,51 @@
+name: 'ResolveAI Usage Example'
+
+on:
+  issues:
+    types: [labeled]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: write
+
+jobs:
+  resolveai:
+    name: 'Run ResolveAI'
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'issues' && contains(github.event.label.name, 'resolveai:run')) ||
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '/resolveai run'))
+    
+    steps:
+      - name: 'Submit to ResolveAI'
+        uses: AIProductLabs/resolveai-action@v1
+        with:
+          ecs_endpoint: ${{ secrets.RESOLVEAI_ECS_ENDPOINT }}
+          ecs_api_token: ${{ secrets.RESOLVEAI_ECS_API_TOKEN }}
+          ecs_hmac_secret: ${{ secrets.RESOLVEAI_ECS_HMAC_SECRET }}
+          action: 'run'
+          allow_write_paths: 'src/**,tests/**,docs/**'
+          deny_write_paths: 'infra/**,scripts/release.sh,.github/workflows/**'
+          llm_provider: 'anthropic'
+          model: 'claude-3-5-sonnet-20241022'
+
+  resolveai-plan:
+    name: 'Plan with ResolveAI'
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'issues' && contains(github.event.label.name, 'resolveai:plan')) ||
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '/resolveai plan'))
+    
+    steps:
+      - name: 'Plan with ResolveAI'
+        uses: AIProductLabs/resolveai-action@v1
+        with:
+          ecs_endpoint: ${{ secrets.RESOLVEAI_ECS_ENDPOINT }}
+          ecs_api_token: ${{ secrets.RESOLVEAI_ECS_API_TOKEN }}
+          ecs_hmac_secret: ${{ secrets.RESOLVEAI_ECS_HMAC_SECRET }}
+          action: 'plan'
+          timeout_seconds: 60
+          max_retries: 2

@@ -1,0 +1,44 @@
+{
+  "name": "resolveai-action",
+  "version": "1.0.0",
+  "description": "Hand off software maintenance jobs to a private runner running in AWS ECS",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc && ncc build lib/index.js --minify --source-map",
+    "package": "ncc build lib/index.js --minify --source-map",
+    "lint": "tsc --noEmit",
+    "test": "jest",
+    "dev": "tsc --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AIProductLabs/resolveai-action.git"
+  },
+  "keywords": [
+    "github-actions",
+    "automation",
+    "maintenance",
+    "ai",
+    "ecs"
+  ],
+  "author": "AIProductLabs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AIProductLabs/resolveai-action/issues"
+  },
+  "homepage": "https://github.com/AIProductLabs/resolveai-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
+    "node-fetch": "^3.3.2",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@vercel/ncc": "^0.38.1",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
