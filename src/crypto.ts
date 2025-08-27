@@ -8,7 +8,8 @@ export function createStableJsonString(payload: JobPayload): string {
 export function signPayload(payload: string, secret: string): string {
   const hmac = createHmac('sha256', secret);
   hmac.update(payload, 'utf8');
-  return `sha256=${hmac.digest('hex')}`;
+  // Use base64 digest to match server expectation (Lambda verifies base64 form)
+  return `sha256=${hmac.digest('base64')}`;
 }
 
 export function createIdempotencyKey(
