@@ -15,7 +15,7 @@ export class ECSClient {
     const jsonPayload = createStableJsonString(payload);
     const signature = signPayload(jsonPayload, this.hmacSecret);
     
-    const headers = {
+    const headers: Record<string,string> = {
       'Content-Type': 'application/json',
       'User-Agent': 'resolveai-action/1.0.0 (+github actions)',
       'X-ResolveAI-Token': this.apiToken,
@@ -25,6 +25,9 @@ export class ECSClient {
     };
     if (payload.tenant) {
       (headers as Record<string,string>)['X-ResolveAI-Tenant'] = payload.tenant;
+    }
+    if ((payload as any).post_comment) {
+      headers['X-ResolveAI-Post-Comment'] = '1';
     }
 
     return this.makeRequestWithRetry(jsonPayload, headers);

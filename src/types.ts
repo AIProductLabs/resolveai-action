@@ -15,6 +15,7 @@ export interface ActionInputs {
   tenant?: string;
   openai_api_key?: string;
   llm_api_key?: string;
+  post_comment?: boolean | string; // string form before validation
 }
 
 export interface GitHubContext {
@@ -49,6 +50,7 @@ export interface JobPayload {
   };
   openai_api_key?: string;
   llm_api_key?: string;
+  post_comment?: boolean;
   secrets: {
     forwarded: {
       vectordb_token: string | null;

@@ -58,6 +58,10 @@ inputs:
   llm_api_key:
     description: 'Generic LLM API key (used if openai_api_key not provided)'
     required: false
+  post_comment:
+    description: 'If true, request runner to post progress/output comments back to the issue/PR'
+    required: false
+    default: 'false'
 
 outputs:
   job_id:

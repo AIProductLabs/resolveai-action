@@ -17,6 +17,7 @@ export const actionInputSchema = z.object({
   tenant: z.string().optional(),
   openai_api_key: z.string().optional(),
   llm_api_key: z.string().optional(),
+  post_comment: z.string().optional(),
 });
 
 export const githubContextSchema = z.object({
@@ -56,6 +57,7 @@ export const jobPayloadSchema = z.object({
   }),
   openai_api_key: z.string().optional(),
   llm_api_key: z.string().optional(),
+  post_comment: z.boolean().optional(),
 });
 
 export const ecsResponseSchema = z.object({

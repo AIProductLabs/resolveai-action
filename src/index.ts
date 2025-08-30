@@ -54,6 +54,7 @@ function getAndValidateInputs(): ActionInputs {
   tenant: core.getInput('tenant') || undefined,
   openai_api_key: core.getInput('openai_api_key') || undefined,
   llm_api_key: core.getInput('llm_api_key') || undefined,
+  post_comment: core.getInput('post_comment') || undefined,
   };
 
   try {
@@ -119,6 +120,16 @@ function buildJobPayload(inputs: ActionInputs, githubContext: GitHubContext): Jo
     },
   openai_api_key: inputs.openai_api_key || undefined,
   llm_api_key: inputs.openai_api_key ? undefined : (inputs.llm_api_key || undefined),
+    post_comment: ((): boolean | undefined => {
+      const v = inputs.post_comment as unknown;
+      if (v === undefined) return undefined;
+      if (typeof v === 'boolean') return v ? true : undefined;
+      if (typeof v === 'string') {
+        const lowered = v.toLowerCase().trim();
+        if (['1','true','yes','on'].includes(lowered)) return true;
+      }
+      return undefined;
+    })(),
   };
 }
 
