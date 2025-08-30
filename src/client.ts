@@ -21,6 +21,7 @@ export class ECSClient {
       'X-ResolveAI-Token': this.apiToken,
       'X-ResolveAI-Signature': signature,
       'X-ResolveAI-Idempotency-Key': payload.idempotency_key,
+      'X-ResolveAI-Repo': payload.github.repository,
     };
 
     return this.makeRequestWithRetry(jsonPayload, headers);
