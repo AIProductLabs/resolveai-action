@@ -49,6 +49,15 @@ inputs:
   vectordb_token:
     description: 'Vector database token (forwarded, not logged)'
     required: false
+  tenant:
+    description: 'Tenant identifier for multi-tenant routing'
+    required: false
+  openai_api_key:
+    description: 'User-supplied OpenAI API key (BYOK)'
+    required: false
+  llm_api_key:
+    description: 'Generic LLM API key (used if openai_api_key not provided)'
+    required: false
 
 outputs:
   job_id:

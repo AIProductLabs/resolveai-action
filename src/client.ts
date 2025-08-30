@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
-import type { JobPayload, ECSResponse, RetryConfig, RequestError } from './types';
-import { ecsResponseSchema } from './schema';
+import type { ECSResponse, RetryConfig, RequestError } from './types';
+import { ecsResponseSchema, type JobPayload } from './schema';
 import { createStableJsonString, signPayload } from './crypto';
 
 export class ECSClient {
@@ -23,6 +23,9 @@ export class ECSClient {
       'X-ResolveAI-Idempotency-Key': payload.idempotency_key,
       'X-ResolveAI-Repo': payload.github.repository,
     };
+    if (payload.tenant) {
+      (headers as Record<string,string>)['X-ResolveAI-Tenant'] = payload.tenant;
+    }
 
     return this.makeRequestWithRetry(jsonPayload, headers);
   }

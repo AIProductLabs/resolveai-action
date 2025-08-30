@@ -14,6 +14,9 @@ export const actionInputSchema = z.object({
   deny_write_paths: z.array(z.string()).default([]),
   vectordb_url: z.string().url().optional(),
   vectordb_token: z.string().optional(),
+  tenant: z.string().optional(),
+  openai_api_key: z.string().optional(),
+  llm_api_key: z.string().optional(),
 });
 
 export const githubContextSchema = z.object({
@@ -32,6 +35,7 @@ export const githubContextSchema = z.object({
 export const jobPayloadSchema = z.object({
   idempotency_key: z.string(),
   timestamp: z.string().datetime(),
+  tenant: z.string().optional(),
   github: githubContextSchema,
   job: z.object({
     action: z.enum(['run', 'plan']),
@@ -50,6 +54,8 @@ export const jobPayloadSchema = z.object({
       vectordb_token: z.string().nullable(),
     }),
   }),
+  openai_api_key: z.string().optional(),
+  llm_api_key: z.string().optional(),
 });
 
 export const ecsResponseSchema = z.object({

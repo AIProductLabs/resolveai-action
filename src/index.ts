@@ -51,6 +51,9 @@ function getAndValidateInputs(): ActionInputs {
     deny_write_paths: parseCommaSeparated(core.getInput('deny_write_paths')),
     vectordb_url: core.getInput('vectordb_url') || undefined,
     vectordb_token: core.getInput('vectordb_token') || undefined,
+  tenant: core.getInput('tenant') || undefined,
+  openai_api_key: core.getInput('openai_api_key') || undefined,
+  llm_api_key: core.getInput('llm_api_key') || undefined,
   };
 
   try {
@@ -95,6 +98,7 @@ function buildJobPayload(inputs: ActionInputs, githubContext: GitHubContext): Jo
   return {
     idempotency_key: idempotencyKey,
     timestamp: new Date().toISOString(),
+  tenant: inputs.tenant || undefined,
     github: githubContext,
     job: {
       action: inputs.action,
@@ -113,6 +117,8 @@ function buildJobPayload(inputs: ActionInputs, githubContext: GitHubContext): Jo
         vectordb_token: inputs.vectordb_token || null,
       },
     },
+  openai_api_key: inputs.openai_api_key || undefined,
+  llm_api_key: inputs.openai_api_key ? undefined : (inputs.llm_api_key || undefined),
   };
 }
 

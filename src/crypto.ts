@@ -26,6 +26,8 @@ export function redactSecrets(obj: Record<string, unknown>): Record<string, unkn
     'ecs_api_token',
     'ecs_hmac_secret',
     'vectordb_token',
+  'openai_api_key',
+  'llm_api_key',
     'token',
     'forwarded'
   ];

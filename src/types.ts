@@ -12,6 +12,9 @@ export interface ActionInputs {
   deny_write_paths?: string[];
   vectordb_url?: string;
   vectordb_token?: string;
+  tenant?: string;
+  openai_api_key?: string;
+  llm_api_key?: string;
 }
 
 export interface GitHubContext {
@@ -30,6 +33,7 @@ export interface GitHubContext {
 export interface JobPayload {
   idempotency_key: string;
   timestamp: string;
+  tenant?: string;
   github: GitHubContext;
   job: {
     action: 'run' | 'plan';
@@ -43,6 +47,8 @@ export interface JobPayload {
       url: string | null;
     };
   };
+  openai_api_key?: string;
+  llm_api_key?: string;
   secrets: {
     forwarded: {
       vectordb_token: string | null;
