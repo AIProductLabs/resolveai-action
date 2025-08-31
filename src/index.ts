@@ -85,6 +85,7 @@ function getGitHubContext(): GitHubContext {
     },
     actor: process.env.GITHUB_ACTOR || context.actor,
     token: process.env.GITHUB_TOKEN || '',
+  event_name: context.eventName,
   };
 }
 

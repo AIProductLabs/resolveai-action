@@ -23,11 +23,23 @@ export class ECSClient {
       'X-ResolveAI-Idempotency-Key': payload.idempotency_key,
       'X-ResolveAI-Repo': payload.github.repository,
     };
-    if (payload.tenant) {
-      (headers as Record<string,string>)['X-ResolveAI-Tenant'] = payload.tenant;
+    if (payload.github.issue_number !== null) {
+      headers['X-ResolveAI-Issue'] = String(payload.github.issue_number);
     }
-    if ((payload as any).post_comment) {
+    if (payload.github.ref) {
+      headers['X-ResolveAI-Ref'] = payload.github.ref;
+    }
+    if (payload.github.sha) {
+      headers['X-ResolveAI-Sha'] = payload.github.sha;
+    }
+    if (payload.tenant) {
+      headers['X-ResolveAI-Tenant'] = payload.tenant;
+    }
+    if (payload.post_comment) {
       headers['X-ResolveAI-Post-Comment'] = '1';
+    }
+    if (payload.github.event_name) {
+      headers['X-ResolveAI-Event'] = payload.github.event_name;
     }
 
     return this.makeRequestWithRetry(jsonPayload, headers);

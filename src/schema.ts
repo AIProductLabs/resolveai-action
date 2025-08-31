@@ -31,6 +31,7 @@ export const githubContextSchema = z.object({
   }),
   actor: z.string(),
   token: z.string(),
+  event_name: z.string().optional(),
 });
 
 export const jobPayloadSchema = z.object({
