@@ -38,6 +38,7 @@ export const jobPayloadSchema = z.object({
   idempotency_key: z.string(),
   timestamp: z.string().datetime(),
   tenant: z.string().optional(),
+  issue_number: z.number().optional(),
   github: githubContextSchema,
   job: z.object({
     action: z.enum(['run', 'plan']),

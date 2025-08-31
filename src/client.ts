@@ -12,7 +12,12 @@ export class ECSClient {
   ) {}
 
   async submitJob(payload: JobPayload): Promise<ECSResponse> {
-    const jsonPayload = createStableJsonString(payload);
+    // Enrich payload with duplicated top-level issue_number (if present) before stable stringify/sign
+    const enrichedPayload: JobPayload = { ...payload };
+    if (typeof payload.github.issue_number === 'number') {
+      (enrichedPayload as any).issue_number = payload.github.issue_number;
+    }
+    const jsonPayload = createStableJsonString(enrichedPayload);
     const signature = signPayload(jsonPayload, this.hmacSecret);
     
     const headers: Record<string,string> = {
@@ -20,26 +25,26 @@ export class ECSClient {
       'User-Agent': 'resolveai-action/1.0.0 (+github actions)',
       'X-ResolveAI-Token': this.apiToken,
       'X-ResolveAI-Signature': signature,
-      'X-ResolveAI-Idempotency-Key': payload.idempotency_key,
-      'X-ResolveAI-Repo': payload.github.repository,
+      'X-ResolveAI-Idempotency-Key': enrichedPayload.idempotency_key,
+      'X-ResolveAI-Repo': enrichedPayload.github.repository,
     };
-    if (payload.github.issue_number !== null) {
-      headers['X-ResolveAI-Issue'] = String(payload.github.issue_number);
+    if (typeof enrichedPayload.github.issue_number === 'number') {
+      headers['X-ResolveAI-Issue'] = String(enrichedPayload.github.issue_number);
     }
-    if (payload.github.ref) {
-      headers['X-ResolveAI-Ref'] = payload.github.ref;
+    if (enrichedPayload.github.ref) {
+      headers['X-ResolveAI-Ref'] = enrichedPayload.github.ref;
     }
-    if (payload.github.sha) {
-      headers['X-ResolveAI-Sha'] = payload.github.sha;
+    if (enrichedPayload.github.sha) {
+      headers['X-ResolveAI-Sha'] = enrichedPayload.github.sha;
     }
-    if (payload.tenant) {
-      headers['X-ResolveAI-Tenant'] = payload.tenant;
+    if (enrichedPayload.tenant) {
+      headers['X-ResolveAI-Tenant'] = enrichedPayload.tenant;
     }
-    if (payload.post_comment) {
+    if (enrichedPayload.post_comment) {
       headers['X-ResolveAI-Post-Comment'] = '1';
     }
-    if (payload.github.event_name) {
-      headers['X-ResolveAI-Event'] = payload.github.event_name;
+    if (enrichedPayload.github.event_name) {
+      headers['X-ResolveAI-Event'] = enrichedPayload.github.event_name;
     }
 
     return this.makeRequestWithRetry(jsonPayload, headers);

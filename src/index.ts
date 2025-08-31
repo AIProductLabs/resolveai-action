@@ -101,6 +101,7 @@ function buildJobPayload(inputs: ActionInputs, githubContext: GitHubContext): Jo
     idempotency_key: idempotencyKey,
     timestamp: new Date().toISOString(),
   tenant: inputs.tenant || undefined,
+  issue_number: githubContext.issue_number === null ? undefined : githubContext.issue_number,
     github: githubContext,
     job: {
       action: inputs.action,

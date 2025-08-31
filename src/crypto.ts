@@ -1,8 +1,23 @@
 import { createHmac } from 'crypto';
 import type { JobPayload } from './schema';
 
+// Deep stable stringify: recursively sorts object keys to produce deterministic JSON.
+// Avoids using the whitelist-array replacer (which previously stripped nested fields).
 export function createStableJsonString(payload: JobPayload): string {
-  return JSON.stringify(payload, Object.keys(payload).sort());
+  const seen = new WeakSet();
+  const normalize = (val: any): any => {
+    if (val === null || typeof val !== 'object') return val;
+    if (seen.has(val)) return null; // cycle guard (shouldn't occur in our payload)
+    seen.add(val);
+    if (Array.isArray(val)) return val.map(v => normalize(v));
+    // Plain object
+    return Object.fromEntries(
+      Object.keys(val)
+        .sort()
+        .map(k => [k, normalize(val[k])])
+    );
+  };
+  return JSON.stringify(normalize(payload));
 }
 
 export function signPayload(payload: string, secret: string): string {

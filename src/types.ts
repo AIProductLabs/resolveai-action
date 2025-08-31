@@ -35,6 +35,8 @@ export interface JobPayload {
   idempotency_key: string;
   timestamp: string;
   tenant?: string;
+  // Duplicate issue number at top-level (in addition to github.issue_number) for Lambda convenience
+  issue_number?: number;
   github: GitHubContext;
   job: {
     action: 'run' | 'plan';
