@@ -16,7 +16,7 @@ inputs:
     description: 'Secret for HMAC-SHA256 signing of the JSON payload'
     required: true
   action:
-  description: 'Action type: "run"'
+    description: 'Action type: "run"'
     required: false
     default: 'run'
   timeout_seconds:
@@ -35,7 +35,10 @@ inputs:
     description: 'LLM provider: "openai" or "anthropic"'
     required: false
   model:
-    description: 'Model name (e.g., "gpt-4o-mini")'
+    description: 'Model name (e.g., "gpt-4o-mini" or "claude-3-5-sonnet-20241022")'
+    required: false
+  llm_model:
+    description: 'Alias of "model" (kept for compatibility)'
     required: false
   allow_write_paths:
     description: 'Comma-separated glob patterns for allowed write paths'

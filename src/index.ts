@@ -37,6 +37,8 @@ async function run(): Promise<void> {
 }
 
 function getAndValidateInputs(): ActionInputs {
+  // Accept both 'model' and legacy 'llm_model' input names (fallback to 'llm_model' if 'model' is absent)
+  const modelInput = (core.getInput('model') || core.getInput('llm_model') || '').trim();
   const rawInputs = {
     ecs_endpoint: core.getInput('ecs_endpoint', { required: true }),
     ecs_api_token: core.getInput('ecs_api_token', { required: true }),
@@ -46,7 +48,7 @@ function getAndValidateInputs(): ActionInputs {
     max_retries: parseInt(core.getInput('max_retries') || '4', 10),
     backoff_ms: parseInt(core.getInput('backoff_ms') || '500', 10),
     llm_provider: core.getInput('llm_provider') || undefined,
-    model: core.getInput('model') || undefined,
+    model: modelInput || undefined,
     allow_write_paths: parseCommaSeparated(core.getInput('allow_write_paths')),
     deny_write_paths: parseCommaSeparated(core.getInput('deny_write_paths')),
     vectordb_url: core.getInput('vectordb_url') || undefined,
