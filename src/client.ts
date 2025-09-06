@@ -27,6 +27,7 @@ export class ECSClient {
       'X-ResolveAI-Signature': signature,
       'X-ResolveAI-Idempotency-Key': enrichedPayload.idempotency_key,
       'X-ResolveAI-Repo': enrichedPayload.github.repository,
+  'X-ResolveAI-Timestamp': Math.floor(Date.now() / 1000).toString(),
     };
     if (typeof enrichedPayload.github.issue_number === 'number') {
       headers['X-ResolveAI-Issue'] = String(enrichedPayload.github.issue_number);

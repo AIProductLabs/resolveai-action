@@ -2,7 +2,7 @@ export interface ActionInputs {
   ecs_endpoint: string;
   ecs_api_token: string;
   ecs_hmac_secret: string;
-  action: 'run' | 'plan';
+  action: 'run';
   timeout_seconds: number;
   max_retries: number;
   backoff_ms: number;
@@ -21,8 +21,8 @@ export interface ActionInputs {
 export interface GitHubContext {
   repository: string;
   issue_number: number | null;
-  ref: string;
-  sha: string;
+  ref?: string;
+  sha?: string;
   workflow_run: {
     id: string;
     attempt: string;
@@ -39,7 +39,7 @@ export interface JobPayload {
   issue_number?: number;
   github: GitHubContext;
   job: {
-    action: 'run' | 'plan';
+    action: 'run';
     allow_write_paths: string[];
     deny_write_paths: string[];
     llm: {
@@ -62,12 +62,12 @@ export interface JobPayload {
 
 export interface ECSResponse {
   job_id: string;
-  status: 'accepted' | 'rejected';
+  status: 'accepted' | 'duplicate' | 'rejected';
 }
 
 export interface ActionOutputs {
   job_id: string;
-  status: 'accepted' | 'rejected';
+  status: 'accepted' | 'duplicate' | 'rejected';
 }
 
 export interface RetryConfig {

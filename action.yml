@@ -16,7 +16,7 @@ inputs:
     description: 'Secret for HMAC-SHA256 signing of the JSON payload'
     required: true
   action:
-    description: 'Action type: "run" or "plan"'
+  description: 'Action type: "run"'
     required: false
     default: 'run'
   timeout_seconds:

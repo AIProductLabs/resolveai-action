@@ -4,7 +4,7 @@ export const actionInputSchema = z.object({
   ecs_endpoint: z.string().url('ECS endpoint must be a valid URL'),
   ecs_api_token: z.string().min(1, 'ECS API token is required'),
   ecs_hmac_secret: z.string().min(1, 'ECS HMAC secret is required'),
-  action: z.enum(['run', 'plan']).default('run'),
+  action: z.enum(['run']).default('run'),
   timeout_seconds: z.number().min(1).max(600).default(120),
   max_retries: z.number().min(0).max(10).default(4),
   backoff_ms: z.number().min(0).max(5000).default(500),
@@ -23,8 +23,8 @@ export const actionInputSchema = z.object({
 export const githubContextSchema = z.object({
   repository: z.string().regex(/^[^/]+\/[^/]+$/, 'Repository must be in format owner/repo'),
   issue_number: z.number().nullable(),
-  ref: z.string(),
-  sha: z.string().regex(/^[a-f0-9]{40}$/, 'SHA must be a valid 40-character hex string'),
+  ref: z.string().optional(),
+  sha: z.string().regex(/^[a-f0-9]{40}$/,'SHA must be a valid 40-character hex string').optional(),
   workflow_run: z.object({
     id: z.string(),
     attempt: z.string(),
@@ -41,7 +41,7 @@ export const jobPayloadSchema = z.object({
   issue_number: z.number().optional(),
   github: githubContextSchema,
   job: z.object({
-    action: z.enum(['run', 'plan']),
+    action: z.enum(['run']),
     allow_write_paths: z.array(z.string()),
     deny_write_paths: z.array(z.string()),
     llm: z.object({
@@ -64,7 +64,7 @@ export const jobPayloadSchema = z.object({
 
 export const ecsResponseSchema = z.object({
   job_id: z.string(),
-  status: z.enum(['accepted', 'rejected']),
+  status: z.enum(['accepted', 'duplicate', 'rejected']),
 });
 
 export type ActionInputs = z.infer<typeof actionInputSchema>;

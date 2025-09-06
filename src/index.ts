@@ -41,7 +41,7 @@ function getAndValidateInputs(): ActionInputs {
     ecs_endpoint: core.getInput('ecs_endpoint', { required: true }),
     ecs_api_token: core.getInput('ecs_api_token', { required: true }),
     ecs_hmac_secret: core.getInput('ecs_hmac_secret', { required: true }),
-    action: core.getInput('action') || 'run',
+  action: 'run',
     timeout_seconds: parseInt(core.getInput('timeout_seconds') || '120', 10),
     max_retries: parseInt(core.getInput('max_retries') || '4', 10),
     backoff_ms: parseInt(core.getInput('backoff_ms') || '500', 10),
